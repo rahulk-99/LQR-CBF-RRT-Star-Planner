@@ -1,109 +1,145 @@
-🏁 LQR–CBF–RRT* Path Planning on F1 Track
+# 🏁 LQR–CBF–RRT* Path Planning on F1 Track
 
-This demonstrates safe and optimal path planning on a Formula 1 race track using the LQR–CBF–RRT* algorithm. The implementation includes a 2D planner and 3D validation with TurtleBot3 in Gazebo via ROS 2. With a larger F1 map, the code has been optimized to achieve a runtime of 7 minutes. A screen-recorded video demonstrating the improvements is available via the drive link at the bottom of the document.
-----------------------------------------
-📂 Folder Structure
+This repository demonstrates **safe and optimal path planning** on a **Formula 1 race track** using the **LQR–CBF–RRT*** algorithm. The implementation includes:
 
+* A **2D planner** using Linear Quadratic Regulator (LQR), Control Barrier Functions (CBF), and RRT*
+* **3D validation** using **TurtleBot3 in Gazebo** via **ROS 2**
+
+For a larger F1 map (Circuit de Barcelona–Catalunya), the code has been optimized to achieve a **runtime of approximately 7–8 minutes**. A screen-recorded video demonstrating the performance improvements is available via the drive link provided at the end of this document.
+
+---
+
+## 🖼 Path Generation Result
+
+The image below shows the generated safe and optimal path on the F1 track:
+
+![LQR–CBF–RRT\* Result](LQR-CBF_result.PNG)
+
+---
+
+## 📂 Folder Structure
+
+```text
 planning_submission/
 ├── LQR_CBF_rrtStar_planning/        # Python planner using LQR + CBF + RRT*
 ├── ros2_package_f1_track/           # ROS 2 package for Gazebo validation
 ├── LQR-CBF_result.PNG               # Sample result image
-└── README.txt                       # This file
+└── README.md                        # Project documentation
+```
 
-----------------------------------------
-🔧 Install Dependencies
+---
+
+## 🔧 Install Dependencies
 
 Before running the planner, install the required Python packages:
 
+```bash
 pip3 install -r requirements.txt
+```
 
-----------------------------------------
-🚀 How to Run the Project
+---
 
-1️⃣ Run the LQR–CBF–RRT* Planner
+## 🚀 How to Run the Project
 
-Note:  Make sure you're in the root directory of the project
+### 1️⃣ Run the LQR–CBF–RRT* Planner (2D Planning)
+
+> **Note:** Make sure you are in the root directory of the project.
+
+```bash
 cd /path/to/final_code_ros_package
-
 python3 LQR_CBF_rrtStar_planning/linear_dynamic_model/LQR_CBF_rrtStar_linear.py
+```
 
 ✔ This will:
-- Load the 2D map of the Barcelona F1 track
-- Plan a safe and optimal path using LQR–CBF–RRT*
-- Save the generated waypoints to the ROS 2 package
 
-----------------------------------------
-2️⃣ Validate in Gazebo (ROS 2)
+* Load the 2D map of the **Barcelona F1 track**
+* Plan a **safe and optimal path** using LQR–CBF–RRT*
+* Save the generated **waypoints** to the ROS 2 package for execution
 
+---
+
+### 2️⃣ Validate in Gazebo (ROS 2)
+
+```bash
 cd ros2_package_f1_track
 
 # Source ROS 2 Humble
 source /opt/ros/humble/setup.bash
 
-# Build the package
+# Build the workspace
 colcon build
 
 # Source the local setup
 source install/setup.bash
+```
 
-➡ Launch the F1 track world in Gazebo:
+➡ **Launch the F1 track world in Gazebo:**
 
+```bash
 ros2 launch turtlebot3_project3 competition_world.launch.py
+```
 
-➡ In a new terminal, run the path-following node:
+➡ **In a new terminal, run the path-following node:**
 
+```bash
 ros2 run turtlebot_path_follower track_follower
+```
 
-----------------------------------------
-✅ Test Case
+---
 
-- Track: Circuit de Barcelona–Catalunya
-- Goal: Navigate from start to finish using LQR-optimal and CBF-safe path
-- Output: Smooth and safe trajectory executed in Gazebo
+## ✅ Test Case
 
-----------------------------------------
+* **Track:** Circuit de Barcelona–Catalunya
+* **Goal:** Navigate from start to finish using an LQR-optimal and CBF-safe path
+* **Output:** Smooth and collision-free trajectory executed in Gazebo
 
-🖼 Sample Output
+### Test Case Details
 
-Refer to: LQR-CBF_result.PNG
-Waypoints: Saved in ros2_package_f1_track/src/turtlebot_path_follower/data
+```python
+x_start = (254, -108)  # Starting node
+x_goal  = (200, -108)  # Goal node
+```
 
-----------------------------------------
-💻 Performance Notes
+> **Note:** This represents the **maximum distance** on the track for path generation. You can modify these values in `LQR_CBF_rrtStar_linear.py` to test different configurations.
 
-- For PC specs with i7, 13th Gen, the runtime is approximately 7-8 minutes.
-- Please keep the laptop charging for better and faster performance.
+---
 
+## 🖼 Sample Output
 
-----------------------------------------
-✅ Test Case
+* **Result Image:** `LQR-CBF_result.PNG`
+* **Waypoints Location:**
 
-- Track: Circuit de Barcelona–Catalunya
-- Goal: Navigate from start to finish using LQR-optimal and CBF-safe path
-- Output: Smooth and safe trajectory executed in Gazebo
+  ```text
+  ros2_package_f1_track/src/turtlebot_path_follower/data
+  ```
 
-Test Case Details:
-    x_start = (254, -108)  # Starting node
-    x_goal  = (200, -108)  # Goal node
+---
 
-Note: This is the maximum distance in the track for the path generation.
-You can change these values in the LQR_CBF_rrtstar_linear.py file if you want to try a different configuration.
+## 💻 Performance Notes
 
-----------------------------------------
+* On a system with **Intel i7 (13th Gen)**, the runtime is approximately **7–8 minutes**.
+* For best performance, ensure the laptop is **plugged in** during execution.
 
+---
 
-🔧 Troubleshooting Module Detection
+## 🔧 Troubleshooting: Module Detection Issue
 
-Some error issue:  
-If not able to detect a module while running LQR_CBF_rrtStar_planning.py, try adding the following after line 12 in the same .py file:
+If you encounter a **module import error** while running the planner, add the following lines **after line 12** in `LQR_CBF_rrtStar_linear.py`:
 
-    sys.path.append(os.path.abspath(os.path.join(__file__, '..', '..')))
+```python
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(__file__, '..', '..')))
+```
 
-----------------------------------------
+---
 
-🔗 Additional Resources
+## 🔗 Additional Resources
 
-For Gazebo simulation videos, complete code, and the ROS package, visit:
-https://drive.google.com/drive/folders/12aKWb8TTLxd9E-hk6cPMj8ICoBYIsaOZ?usp=drive_link
+For **Gazebo simulation videos**, **complete source code**, and the **ROS 2 package**, visit:
 
-----------------------------------------
+👉 [https://drive.google.com/drive/folders/12aKWb8TTLxd9E-hk6cPMj8ICoBYIsaOZ?usp=drive_link](https://drive.google.com/drive/folders/12aKWb8TTLxd9E-hk6cPMj8ICoBYIsaOZ?usp=drive_link)
+
+---
+
+**Keywords:** LQR, Control Barrier Functions, RRT*, Motion Planning, ROS 2, Gazebo, TurtleBot3, Autonomous Navigation
