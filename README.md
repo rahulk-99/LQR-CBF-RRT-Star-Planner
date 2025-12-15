@@ -11,9 +11,11 @@ For a larger F1 map (Circuit de Barcelona–Catalunya), the code has been optimi
 
 ## 🖼 Path Generation Result
 
-The image below shows the generated safe and optimal path on the F1 track:
+The figure below shows:
+- **Left:** LQR–CBF–RRT* path planning on the obstacle map (2D)
+- **Right:** Execution and validation of the generated path in **Gazebo (TurtleBot3, ROS 2)**
 
-![LQR–CBF–RRT\* Result](LQR-CBF_result.PNG)
+![LQR–CBF–RRT* Planning and Gazebo Validation](planning_validation.png)
 
 ---
 
